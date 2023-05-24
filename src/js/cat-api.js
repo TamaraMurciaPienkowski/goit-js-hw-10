@@ -8,13 +8,14 @@ let loading;
 let errorInfo;
 loading = document.querySelector('.loader');
 errorInfo = document.querySelector('.error');
+const catCard = document.querySelector('.cat-info');
 function hideAlert(zmienna) {
   zmienna.classList.add('hidden');
 }
 hideAlert(loading);
 hideAlert(errorInfo);
-function showAlert() {
-  loading.classList.remove('hidden');
+function showAlert(zmienna) {
+  zmienna.classList.remove('hidden');
 }
 function pingUrl(url) {
   return new Promise((resolve, reject) => {
@@ -32,9 +33,7 @@ function pingUrl(url) {
       .catch(err => reject(err));
   });
 }
-pingUrl(catBreeds).then(data => {
-  console.log(data);
-});
+
 function fetchBreeds() {
   pingUrl(catBreeds).then(data => {
     const catChoices = data
@@ -47,14 +46,32 @@ fetchBreeds();
 
 function fetchCatByBreed(breedId) {
   const catUrl = `${chosenCatInfo}?breed_ids=${breedId}`;
-  console.log(catUrl);
+  pingUrl(catUrl)
+    .then(data => {
+      const pictureLink = `<div><img src="${data[0].url}" class= "cat-pic"></div>`;
+      catCard.insertAdjacentHTML('afterbegin', pictureLink);
+    })
+    .catch(err => {
+      showAlert(errorInfo);
+    });
+  const catInfo = `https://api.thecatapi.com/v1/breeds/${breedId}`;
+  pingUrl(catInfo)
+    .then(data => {
+      const catDesciption = `<div class = "cat-txt"><h1>${data.name}</h1><p>${data.description}</p><h2>Temperament</h2><p>${data.temperament}</p></div>`;
+      catCard.insertAdjacentHTML('beforeend', catDesciption);
+    })
+    .catch(err => {
+      showAlert(errorInfo);
+    });
 }
 
 function handleFilterForm(e) {
-  e.preventDefault();
-  showAlert();
+  showAlert(loading);
+  catCard.innerHTML = '';
+  fetchCatByBreed(e.target.value);
+  setTimeout(function () {
+    hideAlert(loading);
+  }, 500);
 }
 
-window.addEventListener('load', function () {
-  catFilter.addEventListener('select', handleFilterForm);
-});
+catFilter.addEventListener('change', handleFilterForm);
