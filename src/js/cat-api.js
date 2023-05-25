@@ -64,6 +64,7 @@ function fetchCatByBreed(breedId) {
 }
 
 function handleFilterForm(e) {
+  hideAlert(errorInfo);
   showAlert(loading);
   catCard.innerHTML = '';
   fetchCatByBreed(e.target.value);
