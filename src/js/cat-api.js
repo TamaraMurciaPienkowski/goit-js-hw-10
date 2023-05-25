@@ -1,21 +1,19 @@
-// const KEY =
-//   'live_idIZYnecHH32vszveU4i2ziq4wdKrE7fa9zUSVuW6nPGuGlzHOwUNGhn4t1Su8ey';
 const catBreeds =
   'https://api.thecatapi.com/v1/breeds?api_key=live_idIZYnecHH32vszveU4i2ziq4wdKrE7fa9zUSVuW6nPGuGlzHOwUNGhn4t1Su8ey';
-catFilter = document.querySelector('.breed-select');
+const catFilter = document.querySelector('.breed-select');
 const chosenCatInfo = 'https://api.thecatapi.com/v1/images/search';
 let loading;
 let errorInfo;
 loading = document.querySelector('.loader');
 errorInfo = document.querySelector('.error');
 const catCard = document.querySelector('.cat-info');
-function hideAlert(zmienna) {
-  zmienna.classList.add('hidden');
+function hideAlert(loader) {
+  loader.classList.add('hidden');
 }
 hideAlert(loading);
 hideAlert(errorInfo);
-function showAlert(zmienna) {
-  zmienna.classList.remove('hidden');
+function showAlert(loader) {
+  loader.classList.remove('hidden');
 }
 function pingUrl(url) {
   return new Promise((resolve, reject) => {
